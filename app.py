@@ -132,8 +132,8 @@ with st.container():
         st.markdown('<div class="form-container">', unsafe_allow_html=True)
 
         # Campos de entrada
-        name = st.text_input("Nome", placeholder="Digite seu nome completo")
-        cpf_matricula = st.text_input("CPF ou Matrícula", placeholder="Digite seu CPF ou matrícula")
+        name = st.text_input("Nome", placeholder="Digite seu nome completo", key="name_input").strip()
+        cpf_matricula = st.text_input("CPF ou Matrícula", placeholder="Digite seu CPF ou matrícula", key="cpf_input").strip()
         empresa = st.selectbox("Empresa", ["Loram", "Prioriza", "Outra"])
         
         # Checkboxes para treinamentos
@@ -148,9 +148,9 @@ with st.container():
 
         if submit_button:
             # Verificações
-            if not name.strip():
+            if not name:
                 st.error("O campo Nome é obrigatório. Por favor, preencha-o.")
-            elif not cpf_matricula.strip():
+            elif not cpf_matricula:
                 st.error("O campo CPF ou Matrícula é obrigatório. Por favor, preencha-o.")
             elif not treinamentos:
                 st.error("Selecione pelo menos um tipo de treinamento.")
