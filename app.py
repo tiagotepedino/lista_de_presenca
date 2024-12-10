@@ -4,7 +4,7 @@ import sqlite3
 from datetime import datetime
 
 # Configurações iniciais do app
-st.set_page_config(page_title="Lista de Presença", layout="wide", initial_sidebar_state="collapsed")
+st.set_page_config(page_title="Lista de Presença", layout="centered", initial_sidebar_state="collapsed")
 
 # Estilização personalizada
 hide_streamlit_style = """
@@ -12,34 +12,26 @@ hide_streamlit_style = """
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
-    .css-18e3th9 {padding-top: 0px;} /* Remove padding global */
-    .title {
-        font-size: 36px;
-        font-weight: bold;
-        color: #FFFFFF;
-        margin-bottom: 10px;
-    }
-    .top-bar {
+    .css-18e3th9 {padding-top: 10px;} /* Remove padding global */
+    .title-bar {
         background-color: #8B0000;
-        padding: 20px;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
-    }
-    .top-bar .title {
+        padding: 10px 20px;
+        width: 80%; /* Reduz largura da barra vermelha */
+        margin: 0 auto; /* Centraliza a barra vermelha */
+        border-radius: 10px;
         text-align: center;
         color: white;
+        font-size: 24px;
+        font-weight: bold;
     }
     .form-container {
         background-color: #FFFFFF;
-        padding: 0px; /* Reduz padding interno */
-        margin: 0px; /* Remove margem externa */
+        padding: 10px; /* Reduz padding interno */
+        margin-top: 10px; /* Remove margem acima */
         border-radius: 10px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     }
-    .form-container input, .form-container select, .form-container .st-multiselect {
+    .form-container input, .form-container select {
         border: 1px solid #D1D1D1;
         border-radius: 5px;
         padding: 10px;
@@ -101,15 +93,13 @@ create_table()
 # Barra fixa no topo
 st.markdown(
     """
-    <div class="top-bar">
-        <div class="title">Lista de Presença</div>
-    </div>
+    <div class="title-bar">Lista de Presença</div>
     """,
     unsafe_allow_html=True
 )
 
 # Formulário de registro
-st.markdown("<h3 class='section-title' style='margin-top: 80px;'>Registro de Presença</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='margin-top: 10px;'>Registro de Presença</h3>", unsafe_allow_html=True)
 with st.container():
     with st.form(key="attendance_form"):
         st.markdown("<div class='form-container'>", unsafe_allow_html=True)
@@ -119,12 +109,12 @@ with st.container():
         cpf_matricula = st.text_input("CPF ou Matrícula", placeholder="Digite seu CPF ou matrícula")
         empresa = st.selectbox("Empresa", ["Loram", "Prioriza", "Outra"])
         
-        # Combo para seleção dos tipos de treinamento
-        treinamentos = st.multiselect(
-            "Tipo de Treinamento",
-            ["Treinamento GQI e Relatório de Qualidade", "Treinamento de Gerenciamento de Dados do RIV"],
-            help="Selecione um ou ambos os treinamentos."
-        )
+        # Checkboxes para seleção dos tipos de treinamento
+        treinamentos = []
+        if st.checkbox("Treinamento GQI e Relatório de Qualidade"):
+            treinamentos.append("Treinamento GQI e Relatório de Qualidade")
+        if st.checkbox("Treinamento de Gerenciamento de Dados do RIV"):
+            treinamentos.append("Treinamento de Gerenciamento de Dados do RIV")
 
         # Botão de registro
         submit_button = st.form_submit_button("Registrar Presença", type="primary")
