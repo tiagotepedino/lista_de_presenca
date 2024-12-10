@@ -12,7 +12,7 @@ hide_streamlit_style = """
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
-    .css-18e3th9 {padding-top: 10px;} /* Reduz padding global */
+    .css-18e3th9 {padding-top: 0px;} /* Remove padding global */
     .title {
         font-size: 36px;
         font-weight: bold;
@@ -34,10 +34,10 @@ hide_streamlit_style = """
     }
     .form-container {
         background-color: #FFFFFF;
-        padding: 10px; /* Reduz padding interno */
+        padding: 0px; /* Reduz padding interno */
+        margin: 0px; /* Remove margem externa */
         border-radius: 10px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-        margin-top: 10px; /* Reduz espaço acima */
     }
     .form-container input, .form-container select, .form-container .st-multiselect {
         border: 1px solid #D1D1D1;
@@ -111,7 +111,6 @@ st.markdown(
 # Formulário de registro
 st.markdown("<h3 class='section-title' style='margin-top: 80px;'>Registro de Presença</h3>", unsafe_allow_html=True)
 with st.container():
-    st.write("Debug: Início do Formulário")  # Debug para verificar espaço
     with st.form(key="attendance_form"):
         st.markdown("<div class='form-container'>", unsafe_allow_html=True)
         
