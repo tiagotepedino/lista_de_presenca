@@ -1,4 +1,5 @@
 import streamlit as st
+import pandas as pd
 import sqlite3
 from datetime import datetime
 
@@ -127,22 +128,31 @@ with st.container():
         # Botão de registro
         submit_button = st.form_submit_button("Registrar Presença", type="primary")
 
+        # Validação do formulário
         if submit_button:
-            if name and cpf_matricula and empresa and treinamentos:
+            if not name.strip():  # Verifica se o nome está vazio
+                st.error("O campo Nome é obrigatório. Por favor, preencha-o.")
+            elif not cpf_matricula.strip():  # Verifica se o CPF ou matrícula está vazio
+                st.error("O campo CPF ou Matrícula é obrigatório. Por favor, preencha-o.")
+            elif not treinamentos:  # Verifica se ao menos um treinamento foi selecionado
+                st.error("Selecione pelo menos um tipo de treinamento.")
+            else:
+                # Se tudo estiver preenchido, salva no banco
                 time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
                 save_data(name, cpf_matricula, empresa, treinamentos, time_now)
                 st.success(f"Presença registrada com sucesso às {time_now}!")
-            else:
-                st.error("Por favor, preencha todos os campos e selecione pelo menos um treinamento.")
         st.markdown("</div>", unsafe_allow_html=True)
 
 # Exibição de dados cadastrados
 st.markdown("<h3 class='section-title'>Presenças Registradas</h3>", unsafe_allow_html=True)
-conn = sqlite3.connect("lista_presenca.db")
-df = pd.read_sql_query("SELECT * FROM presenca", conn)
-conn.close()
+try:
+    conn = sqlite3.connect("lista_presenca.db")
+    df = pd.read_sql_query("SELECT * FROM presenca", conn)
+    conn.close()
 
-if not df.empty:
-    st.dataframe(df)
-else:
-    st.info("Nenhuma presença registrada ainda.")
+    if not df.empty:
+        st.dataframe(df)
+    else:
+        st.info("Nenhuma presença registrada ainda.")
+except Exception as e:
+    st.error(f"Erro ao carregar os dados registrados: {str(e)}")
