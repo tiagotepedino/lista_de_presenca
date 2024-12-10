@@ -12,7 +12,7 @@ hide_streamlit_style = """
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
-    .css-18e3th9 {padding-top: 70px;} /* Ajusta padding para compensar a barra fixa */
+    .css-18e3th9 {padding-top: 50px;} /* Ajusta padding para compensar a barra fixa */
     .title-bar {
         background-color: #8B0000;
         padding: 10px 20px;
