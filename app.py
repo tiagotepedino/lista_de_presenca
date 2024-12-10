@@ -15,11 +15,12 @@ hide_streamlit_style = """
         padding: 0;
     }
     .css-18e3th9 {
-        padding-top: 60px; /* Ajusta padding para compensar a barra fixa */
+        padding-top: 70px; /* Ajusta padding para compensar a barra fixa */
     }
     .title-bar {
         background-color: #8B0000;
         padding: 10px 20px;
+        height: 50px; /* Define altura fixa */
         width: 100%;
         position: fixed;
         top: 0;
@@ -32,9 +33,8 @@ hide_streamlit_style = """
         margin: 0; /* Remove margens extras */
         border: none;
     }
-    h3 {
-        margin-top: 0px; /* Remove margem entre a barra e o título */
-        padding: 0;
+    .content {
+        margin-top: 70px; /* Empurra o conteúdo abaixo da barra */
     }
     .form-container {
         background-color: #FFFFFF;
@@ -111,7 +111,7 @@ st.markdown(
 )
 
 # Certificar que o conteúdo começa abaixo da barra fixa
-st.markdown("<div style='height: 50px;'></div>", unsafe_allow_html=True)
+st.markdown("<div class='content'>", unsafe_allow_html=True)
 
 # Título e formulário
 st.markdown("<h3>Registro de Presença</h3>", unsafe_allow_html=True)
@@ -146,3 +146,6 @@ with st.container():
                 save_data(name, cpf_matricula, empresa, treinamentos, time_now)
                 st.success(f"Presença registrada com sucesso às {time_now}!")
         st.markdown("</div>", unsafe_allow_html=True)
+
+# Fechar o div de conteúdo
+st.markdown("</div>", unsafe_allow_html=True)
