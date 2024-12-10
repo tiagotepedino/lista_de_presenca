@@ -87,10 +87,11 @@ def create_table():
 def save_data(name, cpf_matricula, empresa, treinamentos, time):
     conn = sqlite3.connect("lista_presenca.db")
     cursor = conn.cursor()
-    # Armazena treinamentos como uma string separada por vírgulas
-    treinamentos_str = ", ".join(treinamentos)
-    cursor.execute("INSERT INTO presenca (nome, cpf_matricula, empresa, treinamento, horario) VALUES (?, ?, ?, ?, ?)",
-                   (name, cpf_matricula, empresa, treinamentos_str, time))
+    treinamentos_str = ", ".join(treinamentos)  # Converte a lista de treinamentos para uma string separada por vírgulas
+    cursor.execute(
+        "INSERT INTO presenca (nome, cpf_matricula, empresa, treinamento, horario) VALUES (?, ?, ?, ?, ?)",
+        (name, cpf_matricula, empresa, treinamentos_str, time)
+    )
     conn.commit()
     conn.close()
 
