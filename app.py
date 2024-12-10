@@ -12,7 +12,8 @@ hide_streamlit_style = """
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
-    .css-18e3th9 {padding-top: 60px;} /* Ajusta padding para compensar barra fixa */
+
+    /* Barra fixa no topo */
     .title-bar {
         background-color: #8B0000;
         padding: 10px 20px;
@@ -26,13 +27,22 @@ hide_streamlit_style = """
         font-size: 24px;
         font-weight: bold;
         box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
+        height: 60px; /* Altura fixa */
     }
+
+    /* Ajusta o conteúdo para ficar abaixo da barra */
+    .content {
+        margin-top: 70px; /* Espaço suficiente abaixo da barra */
+    }
+
+    /* Formulário estilizado */
     .form-container {
         background-color: #FFFFFF;
-        padding: 10px; /* Reduz padding interno */
-        margin-top: 20px; /* Espaçamento reduzido abaixo da barra */
+        padding: 15px;
         border-radius: 10px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+        max-width: 600px; /* Limita a largura do formulário */
+        margin: 0 auto; /* Centraliza o formulário */
     }
     .form-container input, .form-container select {
         border: 1px solid #D1D1D1;
@@ -40,6 +50,7 @@ hide_streamlit_style = """
         padding: 10px;
         font-size: 14px;
         width: 100%;
+        margin-bottom: 15px;
     }
     .form-container button {
         background-color: #8B0000;
@@ -101,8 +112,11 @@ st.markdown(
     unsafe_allow_html=True
 )
 
-# Formulário de registro
-st.markdown("<h3 style='margin-top: 20px;'>Registro de Presença</h3>", unsafe_allow_html=True)
+# Certificar que o conteúdo começa abaixo da barra fixa
+st.markdown("<div class='content'>", unsafe_allow_html=True)
+
+# Título e formulário
+st.markdown("<h3>Registro de Presença</h3>", unsafe_allow_html=True)
 with st.container():
     with st.form(key="attendance_form"):
         st.markdown("<div class='form-container'>", unsafe_allow_html=True)
@@ -134,3 +148,6 @@ with st.container():
                 save_data(name, cpf_matricula, empresa, treinamentos, time_now)
                 st.success(f"Presença registrada com sucesso às {time_now}!")
         st.markdown("</div>", unsafe_allow_html=True)
+
+# Fechar o div de conteúdo
+st.markdown("</div>", unsafe_allow_html=True)
