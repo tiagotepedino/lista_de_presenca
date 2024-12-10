@@ -40,7 +40,7 @@ hide_streamlit_style = """
     .section-title {
         font-size: 24px;
         font-weight: bold;
-        margin-bottom: 10px;
+        margin-bottom: 5px;
     }
     </style>
 """
