@@ -9,6 +9,7 @@ st.set_page_config(page_title="Lista de Presença", layout="centered", initial_s
 # Estilização personalizada
 hide_streamlit_style = """
     <style>
+    /* Ocultar menus e rodapé */
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
@@ -26,13 +27,13 @@ hide_streamlit_style = """
         color: white;
         font-size: 24px;
         font-weight: bold;
-        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
-        height: 60px; /* Altura fixa */
+        height: 50px; /* Altura fixa */
+        line-height: 50px; /* Centraliza o texto verticalmente */
     }
 
-    /* Ajusta o conteúdo para ficar abaixo da barra */
+    /* Ajuste do conteúdo para alinhar abaixo da barra */
     .content {
-        margin-top: 65px; /* Reduzido para minimizar a distância */
+        margin-top: 60px; /* Espaço exato da altura da barra */
     }
 
     /* Formulário estilizado */
@@ -44,6 +45,8 @@ hide_streamlit_style = """
         max-width: 600px; /* Limita a largura do formulário */
         margin: 0 auto; /* Centraliza o formulário */
     }
+
+    /* Estilo para os inputs */
     .form-container input, .form-container select {
         border: 1px solid #D1D1D1;
         border-radius: 5px;
@@ -52,6 +55,8 @@ hide_streamlit_style = """
         width: 100%;
         margin-bottom: 15px;
     }
+
+    /* Botão estilizado */
     .form-container button {
         background-color: #8B0000;
         color: white;
@@ -70,7 +75,7 @@ hide_streamlit_style = """
     }
     </style>
 """
-# st.markdown(hide_streamlit_style, unsafe_allow_html=True)
+st.markdown(hide_streamlit_style, unsafe_allow_html=True)
 
 # Função para criar a tabela no SQLite
 def create_table():
