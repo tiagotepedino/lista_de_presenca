@@ -12,22 +12,25 @@ hide_streamlit_style = """
     #MainMenu {visibility: hidden;}
     footer {visibility: hidden;}
     header {visibility: hidden;}
-    .css-18e3th9 {padding-top: 10px;} /* Remove padding global */
+    .css-18e3th9 {padding-top: 60px;} /* Ajusta padding para compensar barra fixa */
     .title-bar {
         background-color: #8B0000;
         padding: 10px 20px;
-        width: 80%; /* Reduz largura da barra vermelha */
-        margin: 0 auto; /* Centraliza a barra vermelha */
-        border-radius: 10px;
+        width: 100%;
+        position: fixed;
+        top: 0;
+        left: 0;
+        z-index: 1000; /* Garante que fique acima de tudo */
         text-align: center;
         color: white;
         font-size: 24px;
         font-weight: bold;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.2);
     }
     .form-container {
         background-color: #FFFFFF;
         padding: 10px; /* Reduz padding interno */
-        margin-top: 10px; /* Remove margem acima */
+        margin-top: 20px; /* Espaçamento reduzido abaixo da barra */
         border-radius: 10px;
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
     }
@@ -99,7 +102,7 @@ st.markdown(
 )
 
 # Formulário de registro
-st.markdown("<h3 style='margin-top: 10px;'>Registro de Presença</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='margin-top: 20px;'>Registro de Presença</h3>", unsafe_allow_html=True)
 with st.container():
     with st.form(key="attendance_form"):
         st.markdown("<div class='form-container'>", unsafe_allow_html=True)
