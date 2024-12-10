@@ -32,7 +32,7 @@ hide_streamlit_style = """
 
     /* Ajusta o conteúdo para ficar abaixo da barra */
     .content {
-        margin-top: 70px; /* Espaço suficiente abaixo da barra */
+        margin-top: 65px; /* Reduzido para minimizar a distância */
     }
 
     /* Formulário estilizado */
@@ -116,7 +116,7 @@ st.markdown(
 st.markdown("<div class='content'>", unsafe_allow_html=True)
 
 # Título e formulário
-st.markdown("<h3>Registro de Presença</h3>", unsafe_allow_html=True)
+st.markdown("<h3 style='margin-top: 0;'>Registro de Presença</h3>", unsafe_allow_html=True)
 with st.container():
     with st.form(key="attendance_form"):
         st.markdown("<div class='form-container'>", unsafe_allow_html=True)
