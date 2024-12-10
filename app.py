@@ -1,21 +1,44 @@
 import streamlit as st
-import pandas as pd
+import sqlite3
 from datetime import datetime
 
 # Configurações iniciais do app
 st.set_page_config(page_title="Lista de Presença", layout="centered")
 
-# Função para salvar os dados no arquivo CSV
+# Função para criar a tabela no SQLite
+def create_table():
+    conn = sqlite3.connect("lista_presenca.db")
+    cursor = conn.cursor()
+    cursor.execute("""
+        CREATE TABLE IF NOT EXISTS presenca (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            email TEXT NOT NULL,
+            horario TEXT NOT NULL
+        )
+    """)
+    conn.commit()
+    conn.close()
+
+# Função para salvar dados no SQLite
 def save_data(name, email, time):
-    data = {"Nome": name, "Email": email, "Horário": time}
-    df = pd.DataFrame([data])
-    try:
-        # Verifica se o arquivo já existe
-        df_existing = pd.read_csv("lista_presenca.csv")
-        df = pd.concat([df_existing, df], ignore_index=True)
-    except FileNotFoundError:
-        pass
-    df.to_csv("lista_presenca.csv", index=False)
+    conn = sqlite3.connect("lista_presenca.db")
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO presenca (nome, email, horario) VALUES (?, ?, ?)", (name, email, time))
+    conn.commit()
+    conn.close()
+
+# Função para obter os dados do banco
+def get_data():
+    conn = sqlite3.connect("lista_presenca.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT nome, email, horario FROM presenca")
+    rows = cursor.fetchall()
+    conn.close()
+    return rows
+
+# Criar a tabela no banco de dados
+create_table()
 
 # Título do app
 st.title("Lista de Presença")
@@ -36,8 +59,9 @@ with st.form(key="attendance_form"):
 
 # Exibir a lista de presença
 st.subheader("Lista de Presença Registrada")
-try:
-    df = pd.read_csv("lista_presenca.csv")
+data = get_data()
+if data:
+    df = [{"Nome": row[0], "Email": row[1], "Horário": row[2]} for row in data]
     st.dataframe(df)
-except FileNotFoundError:
+else:
     st.info("Nenhuma presença registrada ainda.")
