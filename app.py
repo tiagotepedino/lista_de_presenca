@@ -19,7 +19,7 @@ hide_streamlit_style = """
         margin-bottom: 20px;
     }
     .top-bar {
-        background-color: #4A7A8C;
+        background-color: #8B0000;
         padding: 20px;
         position: fixed;
         top: 0;
@@ -38,7 +38,7 @@ hide_streamlit_style = """
         box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
         margin-top: 20px;
     }
-    .form-container input, .form-container select {
+    .form-container input, .form-container select, .form-container .st-multiselect {
         border: 1px solid #D1D1D1;
         border-radius: 5px;
         padding: 10px;
@@ -46,7 +46,7 @@ hide_streamlit_style = """
         width: 100%;
     }
     .form-container button {
-        background-color: #4A7A8C;
+        background-color: #8B0000;
         color: white;
         border: none;
         padding: 10px 20px;
@@ -56,18 +56,10 @@ hide_streamlit_style = """
         cursor: pointer;
         transition: background-color 0.3s ease;
         width: 100%;
+        margin-top: 20px;
     }
     .form-container button:hover {
-        background-color: #376075;
-    }
-    .form-container .col {
-        display: inline-block;
-        width: 48%;
-        margin-right: 2%;
-        vertical-align: top;
-    }
-    .form-container .col:last-child {
-        margin-right: 0;
+        background-color: #6A0000;
     }
     </style>
 """
@@ -83,6 +75,7 @@ def create_table():
             nome TEXT NOT NULL,
             cpf_matricula TEXT NOT NULL,
             empresa TEXT NOT NULL,
+            treinamento TEXT NOT NULL,
             horario TEXT NOT NULL
         )
     """)
@@ -90,11 +83,13 @@ def create_table():
     conn.close()
 
 # Função para salvar dados no SQLite
-def save_data(name, cpf_matricula, empresa, time):
+def save_data(name, cpf_matricula, empresa, treinamentos, time):
     conn = sqlite3.connect("lista_presenca.db")
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO presenca (nome, cpf_matricula, empresa, horario) VALUES (?, ?, ?, ?)",
-                   (name, cpf_matricula, empresa, time))
+    # Armazena treinamentos como uma string separada por vírgulas
+    treinamentos_str = ", ".join(treinamentos)
+    cursor.execute("INSERT INTO presenca (nome, cpf_matricula, empresa, treinamento, horario) VALUES (?, ?, ?, ?, ?)",
+                   (name, cpf_matricula, empresa, treinamentos_str, time))
     conn.commit()
     conn.close()
 
@@ -116,20 +111,38 @@ st.markdown("<h3 class='section-title' style='margin-top: 80px;'>Registro de Pre
 with st.container():
     with st.form(key="attendance_form"):
         st.markdown("<div class='form-container'>", unsafe_allow_html=True)
-        col1, col2 = st.columns(2)
-        with col1:
-            name = st.text_input("Nome", placeholder="Digite seu nome completo")
-            cpf_matricula = st.text_input("CPF ou Matrícula", placeholder="Digite seu CPF ou matrícula")
-        with col2:
-            empresa = st.selectbox("Empresa", ["Loram", "Prioriza", "Outra"])
-            st.markdown("<br>", unsafe_allow_html=True)  # Espaçamento antes do botão
-            submit_button = st.form_submit_button("Registrar Presença", type="primary")
+        
+        # Campos de entrada
+        name = st.text_input("Nome", placeholder="Digite seu nome completo")
+        cpf_matricula = st.text_input("CPF ou Matrícula", placeholder="Digite seu CPF ou matrícula")
+        empresa = st.selectbox("Empresa", ["Loram", "Prioriza", "Outra"])
+        
+        # Combo para seleção dos tipos de treinamento
+        treinamentos = st.multiselect(
+            "Tipo de Treinamento",
+            ["Treinamento GQI e Relatório de Qualidade", "Treinamento de Gerenciamento de Dados do RIV"],
+            help="Selecione um ou ambos os treinamentos."
+        )
+
+        # Botão de registro
+        submit_button = st.form_submit_button("Registrar Presença", type="primary")
 
         if submit_button:
-            if name and cpf_matricula and empresa:
+            if name and cpf_matricula and empresa and treinamentos:
                 time_now = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-                save_data(name, cpf_matricula, empresa, time_now)
+                save_data(name, cpf_matricula, empresa, treinamentos, time_now)
                 st.success(f"Presença registrada com sucesso às {time_now}!")
             else:
-                st.error("Por favor, preencha todos os campos.")
+                st.error("Por favor, preencha todos os campos e selecione pelo menos um treinamento.")
         st.markdown("</div>", unsafe_allow_html=True)
+
+# Exibição de dados cadastrados
+st.markdown("<h3 class='section-title'>Presenças Registradas</h3>", unsafe_allow_html=True)
+conn = sqlite3.connect("lista_presenca.db")
+df = pd.read_sql_query("SELECT * FROM presenca", conn)
+conn.close()
+
+if not df.empty:
+    st.dataframe(df)
+else:
+    st.info("Nenhuma presença registrada ainda.")
