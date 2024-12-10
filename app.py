@@ -20,7 +20,7 @@ hide_streamlit_style = """
     }
     .top-bar {
         background-color: #8B0000;
-        padding: 20px;
+        padding: 10px;
         position: fixed;
         top: 0;
         left: 0;
