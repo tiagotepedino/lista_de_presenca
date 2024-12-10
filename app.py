@@ -28,12 +28,11 @@ hide_streamlit_style = """
         font-size: 24px;
         font-weight: bold;
         height: 50px; /* Altura fixa */
-        line-height: 50px; /* Centraliza o texto verticalmente */
     }
 
     /* Ajuste do conteúdo para alinhar abaixo da barra */
     .content {
-        margin-top: 60px; /* Espaço exato da altura da barra */
+        margin-top: 50px; /* Espaço exato da altura da barra */
     }
 
     /* Formulário estilizado */
