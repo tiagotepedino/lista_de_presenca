@@ -87,7 +87,7 @@ def create_table():
 def save_data(name, cpf_matricula, empresa, treinamentos, time):
     conn = sqlite3.connect("lista_presenca.db")
     cursor = conn.cursor()
-    treinamentos_str = ", ".join(treinamentos)  # Converte a lista de treinamentos para uma string separada por vírgulas
+    treinamentos_str = ", ".join(treinamentos)  # Converte a lista de treinamentos para string
     cursor.execute(
         "INSERT INTO presenca (nome, cpf_matricula, empresa, treinamento, horario) VALUES (?, ?, ?, ?, ?)",
         (name, cpf_matricula, empresa, treinamentos_str, time)
@@ -128,8 +128,7 @@ with st.container():
 
         # Botão de registro
         submit_button = st.form_submit_button("Registrar Presença", type="primary")
-
-        # Validação do formulário
+        
         if submit_button:
             if not name.strip():  # Verifica se o nome está vazio
                 st.error("O campo Nome é obrigatório. Por favor, preencha-o.")
@@ -143,17 +142,3 @@ with st.container():
                 save_data(name, cpf_matricula, empresa, treinamentos, time_now)
                 st.success(f"Presença registrada com sucesso às {time_now}!")
         st.markdown("</div>", unsafe_allow_html=True)
-
-# Exibição de dados cadastrados
-st.markdown("<h3 class='section-title'>Presenças Registradas</h3>", unsafe_allow_html=True)
-try:
-    conn = sqlite3.connect("lista_presenca.db")
-    df = pd.read_sql_query("SELECT * FROM presenca", conn)
-    conn.close()
-
-    if not df.empty:
-        st.dataframe(df)
-    else:
-        st.info("Nenhuma presença registrada ainda.")
-except Exception as e:
-    st.error(f"Erro ao carregar os dados registrados: {str(e)}")
