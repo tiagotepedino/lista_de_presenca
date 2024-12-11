@@ -142,6 +142,8 @@ with st.container():
             treinamentos.append("Treinamento GQI e Relatório de Qualidade")
         if st.checkbox("Treinamento de Gerenciamento de Dados do RIV"):
             treinamentos.append("Treinamento de Gerenciamento de Dados do RIV")
+        if st.checkbox("Treinamento RailPro Infinity Operação"):
+            treinamentos.append("Treinamento RailPro Infinity Operação")
 
         # Botão para envio
         submit_button = st.form_submit_button("Registrar Presença")
